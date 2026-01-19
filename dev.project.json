@@ -1,0 +1,21 @@
+{
+    "name": "luau-package-template-dev",
+    "tree": {
+        "$className": "Folder",
+        "DevPackages": {
+            "$path": "DevPackages"
+        },
+        "Packages": {
+            "$path": "Packages"
+        },
+        "Scripts": {
+            "$path": "Scripts"
+        },
+        "Source": {
+            "$path": "Source"
+        },
+        "Tests": {
+            "$path": "Tests"
+        }
+    }
+}
