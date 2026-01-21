@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1
+- Use kebab-case flag names (`--restart-delay`, `--max-restarts`, `--no-auto-restart`)
+- Update commandline-luau to 0.0.7
+
 ## 0.2.0
 - Added auto-restart on crash with configurable delay and max restarts
 - Added `--restart-delay` flag for configuring restart wait time

@@ -1,7 +1,7 @@
 [package]
 name = "horsenuggets/lune-pm"
 description = "A process manager for Lune applications, similar to pm2."
-version = "0.1.0"
+version = "0.2.1"
 license = "MIT"
 realm = "shared"
 registry = "https://github.com/UpliftGames/wally-index"
@@ -18,7 +18,7 @@ include = [
 exclude = ["**"]
 
 [dependencies]
-Commandline = "horsenuggets/commandline-luau@0.0.5"
+Commandline = "horsenuggets/commandline-luau@0.0.7"
 t = "horsenuggets/t@3.1.1-horse.0.3"
 
 [dev-dependencies]
