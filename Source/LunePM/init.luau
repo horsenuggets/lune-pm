@@ -37,19 +37,19 @@ local startCommand = Commandline.Command.new({
             Type = "string",
         }),
         Commandline.Flag.new({
-            Name = "restartdelay",
+            Name = "restart-delay",
             Shorthand = "d",
             Description = "Seconds to wait before restarting (default: 5)",
             Type = "number",
         }),
         Commandline.Flag.new({
-            Name = "maxrestarts",
+            Name = "max-restarts",
             Shorthand = "m",
             Description = "Maximum restart attempts (default: 10)",
             Type = "number",
         }),
         Commandline.Flag.new({
-            Name = "noautorestart",
+            Name = "no-auto-restart",
             Description = "Disable automatic restart on crash",
             Type = "boolean",
         }),
@@ -64,9 +64,9 @@ local startCommand = Commandline.Command.new({
         pm:Start(args.script, {
             name = flags.name,
             cwd = flags.cwd,
-            restartDelay = flags.restartdelay,
-            maxRestarts = flags.maxrestarts,
-            noAutoRestart = flags.noautorestart,
+            restartDelay = flags["restart-delay"],
+            maxRestarts = flags["max-restarts"],
+            noAutoRestart = flags["no-auto-restart"],
             command = flags.command,
         })
     end,

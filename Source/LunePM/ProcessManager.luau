@@ -273,7 +273,7 @@ function ProcessManager.Logs(self: ProcessManager, name: string, lines: number?,
 
     if follow then
         print(`{stdio.style("dim")}--- Following logs for {name} (Ctrl+C to stop) ---{stdio.style("reset")}`)
-        local tailProcess = process.spawn("tail", { `-n{numLines}`, "-f", logPath }, {
+        process.exec("tail", { `-n{numLines}`, "-f", logPath }, {
             stdio = "inherit",
         })
     else
