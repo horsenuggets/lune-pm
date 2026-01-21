@@ -27,13 +27,48 @@ local startCommand = Commandline.Command.new({
     Flags = {
         Commandline.Flag.new({
             Name = "name",
-            Short = "n",
+            Shorthand = "n",
             Description = "Name for the process",
             Type = "string",
         }),
+        Commandline.Flag.new({
+            Name = "cwd",
+            Description = "Working directory for the process",
+            Type = "string",
+        }),
+        Commandline.Flag.new({
+            Name = "restartdelay",
+            Shorthand = "d",
+            Description = "Seconds to wait before restarting (default: 5)",
+            Type = "number",
+        }),
+        Commandline.Flag.new({
+            Name = "maxrestarts",
+            Shorthand = "m",
+            Description = "Maximum restart attempts (default: 10)",
+            Type = "number",
+        }),
+        Commandline.Flag.new({
+            Name = "noautorestart",
+            Description = "Disable automatic restart on crash",
+            Type = "boolean",
+        }),
+        Commandline.Flag.new({
+            Name = "command",
+            Shorthand = "c",
+            Description = "Custom command to run (instead of lune run)",
+            Type = "string",
+        }),
     },
-    Run = function(args, flags)
-        pm:Start(args.script, flags.name)
+    Impl = function(args, flags)
+        pm:Start(args.script, {
+            name = flags.name,
+            cwd = flags.cwd,
+            restartDelay = flags.restartdelay,
+            maxRestarts = flags.maxrestarts,
+            noAutoRestart = flags.noautorestart,
+            command = flags.command,
+        })
     end,
 })
 
@@ -48,7 +83,7 @@ local stopCommand = Commandline.Command.new({
             Required = true,
         }),
     },
-    Run = function(args)
+    Impl = function(args)
         pm:Stop(args.name)
     end,
 })
@@ -64,7 +99,7 @@ local restartCommand = Commandline.Command.new({
             Required = true,
         }),
     },
-    Run = function(args)
+    Impl = function(args)
         pm:Restart(args.name)
     end,
 })
@@ -73,7 +108,7 @@ local restartCommand = Commandline.Command.new({
 local listCommand = Commandline.Command.new({
     Name = "list",
     Description = "List all managed processes",
-    Run = function()
+    Impl = function()
         pm:List()
     end,
 })
@@ -92,14 +127,20 @@ local logsCommand = Commandline.Command.new({
     Flags = {
         Commandline.Flag.new({
             Name = "lines",
-            Short = "n",
-            Description = "Number of lines to show",
+            Shorthand = "n",
+            Description = "Number of lines to show (default: 50)",
             Type = "number",
             Default = 50,
         }),
+        Commandline.Flag.new({
+            Name = "follow",
+            Shorthand = "f",
+            Description = "Follow log output in real-time",
+            Type = "boolean",
+        }),
     },
-    Run = function(args, flags)
-        pm:Logs(args.name, flags.lines)
+    Impl = function(args, flags)
+        pm:Logs(args.name, flags.lines, flags.follow)
     end,
 })
 
@@ -114,7 +155,7 @@ local deleteCommand = Commandline.Command.new({
             Required = true,
         }),
     },
-    Run = function(args)
+    Impl = function(args)
         pm:Delete(args.name)
     end,
 })
@@ -135,7 +176,7 @@ local deployCommand = Commandline.Command.new({
             Required = true,
         }),
     },
-    Run = function(args)
+    Impl = function(args)
         pm:Deploy(args.name, args.script)
     end,
 })
@@ -154,12 +195,12 @@ local rollbackCommand = Commandline.Command.new({
     Flags = {
         Commandline.Flag.new({
             Name = "version",
-            Short = "v",
+            Shorthand = "v",
             Description = "Version number to rollback to (default: previous)",
             Type = "number",
         }),
     },
-    Run = function(args, flags)
+    Impl = function(args, flags)
         pm:Rollback(args.name, flags.version)
     end,
 })
@@ -175,8 +216,44 @@ local statusCommand = Commandline.Command.new({
             Required = true,
         }),
     },
-    Run = function(args)
+    Impl = function(args)
         pm:Status(args.name)
+    end,
+})
+
+-- Startup command
+local startupCommand = Commandline.Command.new({
+    Name = "startup",
+    Description = "Configure lune-pm to start on system boot",
+    Flags = {
+        Commandline.Flag.new({
+            Name = "platform",
+            Shorthand = "p",
+            Description = "Platform (systemd)",
+            Type = "string",
+            Default = "systemd",
+        }),
+    },
+    Impl = function(_, flags)
+        pm:Startup(flags.platform)
+    end,
+})
+
+-- Monit command
+local monitCommand = Commandline.Command.new({
+    Name = "monit",
+    Description = "Real-time process monitoring dashboard",
+    Flags = {
+        Commandline.Flag.new({
+            Name = "interval",
+            Shorthand = "i",
+            Description = "Refresh interval in seconds (default: 2)",
+            Type = "number",
+            Default = 2,
+        }),
+    },
+    Impl = function(_, flags)
+        pm:Monit(flags.interval)
     end,
 })
 
@@ -190,6 +267,8 @@ Commandline.registerCommand(deleteCommand)
 Commandline.registerCommand(deployCommand)
 Commandline.registerCommand(rollbackCommand)
 Commandline.registerCommand(statusCommand)
+Commandline.registerCommand(startupCommand)
+Commandline.registerCommand(monitCommand)
 
 return {
     Commandline = Commandline,

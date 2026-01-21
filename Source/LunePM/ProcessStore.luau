@@ -20,13 +20,19 @@ local LOGS_DIR = `{LPM_DATA_DIR}/logs`
 export type ProcessConfig = {
     name: string,
     script: string,
+    cwd: string?,
     pid: number?,
     status: "online" | "stopped" | "errored",
     restarts: number,
+    maxRestarts: number?,
+    restartDelay: number?,
+    autoRestart: boolean?,
     createdAt: string,
     updatedAt: string,
     currentVersion: number,
     versions: { string },
+    env: { [string]: string }?,
+    command: string?,
 }
 
 local ProcessStore = {}
