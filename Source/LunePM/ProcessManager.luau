@@ -12,7 +12,6 @@ local fs = require("@lune/fs")
 local process = require("@lune/process")
 local stdio = require("@lune/stdio")
 local t = require("@packages/t")
-local task = require("@lune/task")
 
 local ProcessManager = {}
 ProcessManager.__index = ProcessManager
