@@ -441,25 +441,25 @@ local LPM_DATA_DIR = process.env.HOME .. "/.lune-pm"
 local PROCESS_FILE = LPM_DATA_DIR .. "/processes.json"
 
 local function resurrect()
-	if not fs.isFile(PROCESS_FILE) then
-		print("No processes to resurrect")
-		return
-	end
+    if not fs.isFile(PROCESS_FILE) then
+        print("No processes to resurrect")
+        return
+    end
 
-	local content = fs.readFile(PROCESS_FILE)
-	local processes = serde.decode("json", content)
+    local content = fs.readFile(PROCESS_FILE)
+    local processes = serde.decode("json", content)
 
-	for name, config in processes do
-		if config.autoRestart then
-			print("Resurrecting " .. name .. "...")
-			local result = process.exec("lpm", { "start", config.script, "--name", name })
-			if result.ok then
-				print("  Started " .. name)
-			else
-				print("  Failed to start " .. name .. ": " .. result.stderr)
-			end
-		end
-	end
+    for name, config in processes do
+        if config.autoRestart then
+            print("Resurrecting " .. name .. "...")
+            local result = process.exec("lpm", { "start", config.script, "--name", name })
+            if result.ok then
+                print("  Started " .. name)
+            else
+                print("  Failed to start " .. name .. ": " .. result.stderr)
+            end
+        end
+    end
 end
 
 resurrect()
