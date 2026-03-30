@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.2
+- Restructured CLI to use root Command with Subcommands array pattern
+- Extracted all 11 commands into individual modules under LpmCommand/
+- Moved ProcessManager and ProcessStore to Helpers/ directory
+- Added BuildExecutable.luau and GenerateVersion.luau scripts
+- Added version embedding via __VERSION__.luau for compiled binaries
+- Added Chalk dependency for colored build output
+- Fixed submodule registration for luau-cicd and claude-md-luau
+- Fixed config files to use correct project names
+- Reverted CI to use lune run for submodule scripts
+
 ## 0.2.1
 - Use kebab-case flag names (`--restart-delay`, `--max-restarts`, `--no-auto-restart`)
 - Update commandline-luau to 0.0.7
