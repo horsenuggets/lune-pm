@@ -1,6 +1,6 @@
 {
-    "name": "luau-package-template",
+    "name": "lune-pm",
     "tree": {
-        "$path": "Source/LuauPackageTemplate"
+        "$path": "Source/LunePM"
     }
 }
