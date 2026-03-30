@@ -6,6 +6,20 @@ on:
       - release
 
 jobs:
+  wally-auth:
+    name: Verify Wally auth
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check WALLY_AUTH exists
+        env:
+          WALLY_AUTH: ${{ secrets.WALLY_AUTH }}
+        run: |
+          if [ -z "$WALLY_AUTH" ]; then
+            echo "::error::WALLY_AUTH secret is not configured. Run: gh secret set WALLY_AUTH < ~/.wally/auth.toml"
+            exit 1
+          fi
+          echo "WALLY_AUTH is configured."
+
   pr-title:
     name: Validate PR title
     runs-on: ubuntu-latest
@@ -61,7 +75,7 @@ jobs:
         uses: CompeyDev/setup-rokit@v0.1.2
 
       - name: Check formatting
-        run: lune run ./Submodules/luau-cicd/Scripts/CheckFormatting.luau
+        run: ./Submodules/luau-cicd/Scripts/CheckFormatting.luau
 
   test:
     name: Run tests
@@ -79,7 +93,7 @@ jobs:
         run: wally install
 
       - name: Run tests
-        run: lune run ./Scripts/RunTests.luau
+        run: ./Scripts/RunTests.luau
 
   analyze:
     name: Static analysis
@@ -100,7 +114,30 @@ jobs:
         run: lune setup --no-update-luaurc
 
       - name: Run static analysis
-        run: lune run ./Submodules/luau-cicd/Scripts/RunStaticAnalysis.luau
+        run: ./Submodules/luau-cicd/Scripts/RunStaticAnalysis.luau lune
+
+  json-format:
+    name: Check JSON format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Prettier
+        run: npm install -g prettier
+
+      - name: Setup Rokit
+        uses: CompeyDev/setup-rokit@v0.1.2
+
+      - name: Check JSON format
+        run: ./Submodules/luau-cicd/Scripts/CheckJsonFormat.luau
 
   version:
     name: Validate version
@@ -116,16 +153,16 @@ jobs:
         uses: CompeyDev/setup-rokit@v0.1.2
 
       - name: Check version update
-        run: lune run ./Submodules/luau-cicd/Scripts/EnsureProperVersionUpdate.luau
+        run: ./Submodules/luau-cicd/Scripts/EnsureProperVersionUpdate.luau
 
       - name: Check version match
-        run: lune run ./Submodules/luau-cicd/Scripts/CheckVersionMatch.luau
+        run: ./Submodules/luau-cicd/Scripts/CheckVersionMatch.luau
 
       - name: Check changelog entry
-        run: lune run ./Submodules/luau-cicd/Scripts/CheckChangelogVersion.luau
+        run: ./Submodules/luau-cicd/Scripts/CheckChangelogVersion.luau
 
       - name: Check changelog format
-        run: lune run ./Submodules/luau-cicd/Scripts/CheckChangelogFormat.luau
+        run: ./Submodules/luau-cicd/Scripts/CheckChangelogFormat.luau
 
       - name: Verify PR title matches VERSION
         run: |

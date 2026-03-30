@@ -1,5 +1,5 @@
 {
-    "name": "luau-package-template-dev",
+    "name": "lune-pm-dev",
     "tree": {
         "$className": "Folder",
         "DevPackages": {
