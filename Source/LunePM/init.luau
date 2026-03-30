@@ -20,3 +20,5 @@ local function lunePm()
 end
 
 lunePm()
+
+return LpmCommand
