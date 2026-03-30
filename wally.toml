@@ -16,6 +16,7 @@ include = [
     "wally.toml",
 ]
 exclude = ["**"]
+private = true
 
 [dependencies]
 Chalk = "horsenuggets/chalk-luau@1.0.0"
