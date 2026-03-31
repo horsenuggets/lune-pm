@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0
+- Modernize CLI with Commandline Toolkit build and completion scripts
+- Standardize CI workflows across all commandline-luau CLI repos
+- Add per-repo Terraform config for branch protection
+- Bump lune to 0.10.4-horse.14.2
+
 ## 0.2.2
 - Restructured CLI to use root Command with Subcommands array pattern
 - Extracted all 11 commands into individual modules under LpmCommand/
