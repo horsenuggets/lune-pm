@@ -23,10 +23,6 @@ local function buildExecutable()
         Name = "lpm",
         EntryPoint = "Source/LunePM",
         Target = process.args[1],
-        AliasDirs = {
-            { alias = "@lunepm", dir = "Source/LunePM" },
-            { alias = "@packages", dir = "Packages" },
-        },
     })
 end
 
