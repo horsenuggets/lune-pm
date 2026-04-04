@@ -7,7 +7,6 @@ realm = "shared"
 registry = "https://github.com/UpliftGames/wally-index"
 repository = "https://github.com/horsenuggets/lune-pm"
 include = [
-    ".luaurc",
     "default.project.json",
     "init.luau",
     "LICENSE",
