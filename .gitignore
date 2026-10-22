@@ -22,3 +22,10 @@ __VERSION__.luau
 .terraform/
 *.tfstate
 *.tfstate.backup
+
+# Project
+/CONTEXT.md
+
+# Worktrees
+/.worktrees/
+/.wt/
