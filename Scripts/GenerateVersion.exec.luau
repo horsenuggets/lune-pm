@@ -2,7 +2,7 @@
 
 --[[
 
-GenerateVersion
+GenerateVersion.exec
 
 Reads the VERSION file and generates a __VERSION__.luau module that
 returns the version string. This is used to embed the version at build
@@ -14,10 +14,12 @@ local Commandline = require("@packages/Commandline")
 
 local VERSION_OUTPUT = "Source/LunePM/LpmCommand/__VERSION__.luau"
 
-local function generateVersion()
+const GenerateVersion = {}
+
+function GenerateVersion.exec()
     Commandline.Toolkit.generateVersion({
         OutputPath = VERSION_OUTPUT,
     })
 end
 
-generateVersion()
+GenerateVersion.exec()
