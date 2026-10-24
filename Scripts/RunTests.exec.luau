@@ -2,25 +2,27 @@
 
 --[[
 
-RunTests
+RunTests.exec
 
 Executes all test suites and exits with appropriate status code. Optionally pass a test
 name as an argument to run only that test suite.
 
-[Usage] lune run ./Scripts/RunTests.luau [TestName]
+[Usage] ./Scripts/RunTests.exec.luau [TestName]
 
 --]]
 
-local Testable = require("@devpackages/Testable")
-local process = require("@lune/process")
-local stdio = require("@lune/stdio")
+const Testable = require("@devpackages/Testable")
+const process = require("@lune/process")
+const stdio = require("@lune/stdio")
 
-local TESTS = {
+const TESTS = {
     { Name = "ExampleTest", Func = require("../Tests/ExampleTest.spec") },
 }
 
-local function runTests()
-    local filterName = process.args[1]
+const RunTests = {}
+
+function RunTests.exec()
+    const filterName = process.args[1]
     local testsToRun = TESTS
 
     if filterName then
@@ -41,8 +43,8 @@ local function runTests()
         end
     end
 
-    local _, passed = Testable.run(testsToRun)
+    const _, passed = Testable.run(testsToRun)
     process.exit(if passed then 0 else 1)
 end
 
-runTests()
+RunTests.exec()

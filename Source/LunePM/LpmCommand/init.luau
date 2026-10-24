@@ -7,19 +7,19 @@ Lune application processes.
 
 --]]
 
-local Commandline = require("@packages/Commandline")
-local DeleteCommand = require("@self/DeleteCommand")
-local DeployCommand = require("@self/DeployCommand")
-local ListCommand = require("@self/ListCommand")
-local LogsCommand = require("@self/LogsCommand")
-local MonitCommand = require("@self/MonitCommand")
-local RestartCommand = require("@self/RestartCommand")
-local RollbackCommand = require("@self/RollbackCommand")
-local StartCommand = require("@self/StartCommand")
-local StartupCommand = require("@self/StartupCommand")
-local StatusCommand = require("@self/StatusCommand")
-local StopCommand = require("@self/StopCommand")
-local __VERSION__ = require("@self/__VERSION__")
+const Commandline = require("@packages/Commandline")
+const DeleteCommand = require("@self/DeleteCommand")
+const DeployCommand = require("@self/DeployCommand")
+const ListCommand = require("@self/ListCommand")
+const LogsCommand = require("@self/LogsCommand")
+const MonitCommand = require("@self/MonitCommand")
+const RestartCommand = require("@self/RestartCommand")
+const RollbackCommand = require("@self/RollbackCommand")
+const StartCommand = require("@self/StartCommand")
+const StartupCommand = require("@self/StartupCommand")
+const StatusCommand = require("@self/StatusCommand")
+const StopCommand = require("@self/StopCommand")
+const __VERSION__ = require("@self/__VERSION__")
 
 return Commandline.Command.new({
     Name = "lpm",

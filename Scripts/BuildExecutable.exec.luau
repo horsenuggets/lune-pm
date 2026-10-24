@@ -2,19 +2,21 @@
 
 --[[
 
-BuildExecutable
+BuildExecutable.exec
 
 Compiles the lpm CLI to a standalone executable. Embeds the VERSION at
 build time since compiled executables cannot read files at runtime.
 
 --]]
 
-local Commandline = require("@packages/Commandline")
-local process = require("@lune/process")
+const Commandline = require("@packages/Commandline")
+const process = require("@lune/process")
 
-local VERSION_OUTPUT = "Source/LunePM/LpmCommand/__VERSION__.luau"
+const VERSION_OUTPUT = "Source/LunePM/LpmCommand/__VERSION__.luau"
 
-local function buildExecutable()
+const BuildExecutable = {}
+
+function BuildExecutable.exec()
     Commandline.Toolkit.generateVersion({
         OutputPath = VERSION_OUTPUT,
     })
@@ -26,4 +28,4 @@ local function buildExecutable()
     })
 end
 
-buildExecutable()
+BuildExecutable.exec()
