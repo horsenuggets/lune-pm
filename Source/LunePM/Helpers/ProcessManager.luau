@@ -160,7 +160,7 @@ function ProcessManager.Stop(self: ProcessManager, name: string): boolean
         return false
     end
 
-    const result = process.exec("kill", { tostring(config.pid) })
+    process.exec("kill", { tostring(config.pid) })
 
     config.status = "stopped"
     config.pid = nil
