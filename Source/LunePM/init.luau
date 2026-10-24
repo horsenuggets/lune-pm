@@ -9,12 +9,12 @@ with process arguments.
 
 --]]
 
-local process = require("@lune/process")
+const process = require("@lune/process")
 
-local Commandline = require("@packages/Commandline")
-local LpmCommand = require("@self/LpmCommand")
+const Commandline = require("@packages/Commandline")
+const LpmCommand = require("@self/LpmCommand")
 
-local function lunePm()
+const function lunePm()
     Commandline.registerCommand(LpmCommand)
     LpmCommand:Execute(process.args)
 end

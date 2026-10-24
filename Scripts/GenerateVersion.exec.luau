@@ -10,9 +10,9 @@ time since compiled executables cannot read files.
 
 --]]
 
-local Commandline = require("@packages/Commandline")
+const Commandline = require("@packages/Commandline")
 
-local VERSION_OUTPUT = "Source/LunePM/LpmCommand/__VERSION__.luau"
+const VERSION_OUTPUT = "Source/LunePM/LpmCommand/__VERSION__.luau"
 
 const GenerateVersion = {}
 

@@ -9,10 +9,10 @@ build time since compiled executables cannot read files at runtime.
 
 --]]
 
-local Commandline = require("@packages/Commandline")
-local process = require("@lune/process")
+const Commandline = require("@packages/Commandline")
+const process = require("@lune/process")
 
-local VERSION_OUTPUT = "Source/LunePM/LpmCommand/__VERSION__.luau"
+const VERSION_OUTPUT = "Source/LunePM/LpmCommand/__VERSION__.luau"
 
 const BuildExecutable = {}
 

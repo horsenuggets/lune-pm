@@ -7,10 +7,10 @@ in the background and registers it with the process store.
 
 --]]
 
-local Commandline = require("@packages/Commandline")
-local ProcessManager = require("@lunepm/Helpers/ProcessManager")
+const Commandline = require("@packages/Commandline")
+const ProcessManager = require("@lunepm/Helpers/ProcessManager")
 
-local pm = ProcessManager.new()
+const pm = ProcessManager.new()
 
 return Commandline.Command.new({
     Name = "start",

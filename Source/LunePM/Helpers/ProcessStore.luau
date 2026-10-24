@@ -7,15 +7,15 @@ in the user's home directory.
 
 --]]
 
-local fs = require("@lune/fs")
-local process = require("@lune/process")
-local serde = require("@lune/serde")
-local t = require("@packages/t")
+const fs = require("@lune/fs")
+const process = require("@lune/process")
+const serde = require("@lune/serde")
+const t = require("@packages/t")
 
-local LPM_DATA_DIR = `{process.env.HOME}/.lune-pm`
-local PROCESS_FILE = `{LPM_DATA_DIR}/processes.json`
-local VERSIONS_DIR = `{LPM_DATA_DIR}/versions`
-local LOGS_DIR = `{LPM_DATA_DIR}/logs`
+const LPM_DATA_DIR = `{process.env.HOME}/.lune-pm`
+const PROCESS_FILE = `{LPM_DATA_DIR}/processes.json`
+const VERSIONS_DIR = `{LPM_DATA_DIR}/versions`
+const LOGS_DIR = `{LPM_DATA_DIR}/logs`
 
 export type ProcessConfig = {
     name: string,
@@ -35,10 +35,10 @@ export type ProcessConfig = {
     command: string?,
 }
 
-local ProcessStore = {}
+const ProcessStore = {}
 ProcessStore.__index = ProcessStore
 
-local function ensureDirectories()
+const function ensureDirectories()
     if not fs.isDir(LPM_DATA_DIR) then
         fs.writeDir(LPM_DATA_DIR)
     end
@@ -51,7 +51,7 @@ local function ensureDirectories()
 end
 
 function ProcessStore.new()
-    local self = setmetatable({}, ProcessStore)
+    const self = setmetatable({}, ProcessStore)
     ensureDirectories()
     return self
 end
@@ -61,8 +61,8 @@ function ProcessStore.GetAll(self: ProcessStore): { [string]: ProcessConfig }
         return {}
     end
 
-    local content = fs.readFile(PROCESS_FILE)
-    local success, data = pcall(function()
+    const content = fs.readFile(PROCESS_FILE)
+    const success, data = pcall(function()
         return serde.decode("json", content)
     end)
 
@@ -75,7 +75,7 @@ end
 function ProcessStore.Get(self: ProcessStore, name: string): ProcessConfig?
     assert(t.string(name), "Expected name to be a string")
 
-    local processes = self:GetAll()
+    const processes = self:GetAll()
     return processes[name]
 end
 
@@ -83,7 +83,7 @@ function ProcessStore.Save(self: ProcessStore, config: ProcessConfig)
     assert(t.table(config), "Expected config to be a table")
     assert(t.string(config.name), "Expected config.name to be a string")
 
-    local processes = self:GetAll()
+    const processes = self:GetAll()
     config.updatedAt = os.date("%Y-%m-%dT%H:%M:%S")
     processes[config.name] = config
     fs.writeFile(PROCESS_FILE, serde.encode("json", processes, true))
@@ -92,7 +92,7 @@ end
 function ProcessStore.Delete(self: ProcessStore, name: string)
     assert(t.string(name), "Expected name to be a string")
 
-    local processes = self:GetAll()
+    const processes = self:GetAll()
     processes[name] = nil
     fs.writeFile(PROCESS_FILE, serde.encode("json", processes, true))
 end
@@ -101,21 +101,21 @@ function ProcessStore.SaveVersion(self: ProcessStore, name: string, scriptPath: 
     assert(t.string(name), "Expected name to be a string")
     assert(t.string(scriptPath), "Expected scriptPath to be a string")
 
-    local config = self:Get(name)
+    const config = self:Get(name)
     if not config then
         error(`Process "{name}" not found`)
     end
 
-    local versionDir = `{VERSIONS_DIR}/{name}`
+    const versionDir = `{VERSIONS_DIR}/{name}`
     if not fs.isDir(versionDir) then
         fs.writeDir(versionDir)
     end
 
-    local versionNumber = #config.versions + 1
-    local versionFile = `{versionDir}/v{versionNumber}.luau`
+    const versionNumber = #config.versions + 1
+    const versionFile = `{versionDir}/v{versionNumber}.luau`
 
     -- Copy the script to the versions directory
-    local content = fs.readFile(scriptPath)
+    const content = fs.readFile(scriptPath)
     fs.writeFile(versionFile, content)
 
     table.insert(config.versions, versionFile)
@@ -128,12 +128,12 @@ end
 function ProcessStore.GetVersionPath(self: ProcessStore, name: string, version: number?): string?
     assert(t.string(name), "Expected name to be a string")
 
-    local config = self:Get(name)
+    const config = self:Get(name)
     if not config then
         return nil
     end
 
-    local v = version or config.currentVersion
+    const v = version or config.currentVersion
     return config.versions[v]
 end
 

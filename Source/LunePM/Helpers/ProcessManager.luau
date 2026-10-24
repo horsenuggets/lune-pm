@@ -7,35 +7,35 @@ and monitoring functionality with auto-restart support.
 
 --]]
 
-local fs = require("@lune/fs")
-local process = require("@lune/process")
-local stdio = require("@lune/stdio")
-local t = require("@packages/t")
+const fs = require("@lune/fs")
+const process = require("@lune/process")
+const stdio = require("@lune/stdio")
+const t = require("@packages/t")
 
-local ProcessStore = require("./ProcessStore")
+const ProcessStore = require("./ProcessStore")
 
-local ProcessManager = {}
+const ProcessManager = {}
 ProcessManager.__index = ProcessManager
 
-local store = ProcessStore.new()
+const store = ProcessStore.new()
 
-local DEFAULT_RESTART_DELAY = 5
-local DEFAULT_MAX_RESTARTS = 10
+const DEFAULT_RESTART_DELAY = 5
+const DEFAULT_MAX_RESTARTS = 10
 
 function ProcessManager.new()
-    local self = setmetatable({}, ProcessManager)
+    const self = setmetatable({}, ProcessManager)
     return self
 end
 
-local function isProcessRunning(pid: number): boolean
-    local result = process.exec("kill", { "-0", tostring(pid) })
+const function isProcessRunning(pid: number): boolean
+    const result = process.exec("kill", { "-0", tostring(pid) })
     return result.ok
 end
 
-local function getProcessCommand(config: ProcessStore.ProcessConfig): (string, { string })
+const function getProcessCommand(config: ProcessStore.ProcessConfig): (string, { string })
     if config.command then
-        local parts = string.split(config.command, " ")
-        local cmd = table.remove(parts, 1) :: string
+        const parts = string.split(config.command, " ")
+        const cmd = table.remove(parts, 1) :: string
         return cmd, parts
     end
 
@@ -57,23 +57,23 @@ function ProcessManager.Start(
 ): ProcessStore.ProcessConfig
     assert(t.string(scriptPath), "Expected scriptPath to be a string")
 
-    local opts = options or {}
+    const opts = options or {}
 
     if not opts.command and not fs.isFile(scriptPath) then
         error(`Script not found: {scriptPath}`)
     end
 
-    local processName = opts.name or scriptPath:match("([^/]+)%.luau$") or "unnamed"
+    const processName = opts.name or scriptPath:match("([^/]+)%.luau$") or "unnamed"
 
-    local existing = store:Get(processName)
+    const existing = store:Get(processName)
     if existing and existing.status == "online" and existing.pid then
         if isProcessRunning(existing.pid) then
             error(`Process "{processName}" is already running (pid: {existing.pid})`)
         end
     end
 
-    local logPath = store:GetLogPath(processName)
-    local workingDir = opts.cwd or process.cwd
+    const logPath = store:GetLogPath(processName)
+    const workingDir = opts.cwd or process.cwd
 
     local config: ProcessStore.ProcessConfig = existing
         or {
@@ -111,15 +111,15 @@ function ProcessManager.Start(
         config = store:Get(processName) :: ProcessStore.ProcessConfig
     end
 
-    local cmd, args = getProcessCommand(config)
-    local shellCmd = `nohup {cmd} {table.concat(args, " ")} >> {logPath} 2>&1 & echo $!`
+    const cmd, args = getProcessCommand(config)
+    const shellCmd = `nohup {cmd} {table.concat(args, " ")} >> {logPath} 2>&1 & echo $!`
 
-    local result = process.exec("sh", { "-c", shellCmd }, {
+    const result = process.exec("sh", { "-c", shellCmd }, {
         cwd = config.cwd,
     })
 
     if result.ok then
-        local pid = tonumber(result.stdout:match("%d+"))
+        const pid = tonumber(result.stdout:match("%d+"))
         config.pid = pid
         config.status = "online"
         store:Save(config)
@@ -138,7 +138,7 @@ function ProcessManager.Stop(self: ProcessManager, name: string): boolean
     assert(t.string(name), "Expected name to be a string")
 
     if name == "all" then
-        local processes = store:GetAll()
+        const processes = store:GetAll()
         local stopped = 0
         for processName, config in processes do
             if config.status == "online" then
@@ -150,7 +150,7 @@ function ProcessManager.Stop(self: ProcessManager, name: string): boolean
         return true
     end
 
-    local config = store:Get(name)
+    const config = store:Get(name)
     if not config then
         error(`Process "{name}" not found`)
     end
@@ -160,7 +160,7 @@ function ProcessManager.Stop(self: ProcessManager, name: string): boolean
         return false
     end
 
-    local result = process.exec("kill", { tostring(config.pid) })
+    const result = process.exec("kill", { tostring(config.pid) })
 
     config.status = "stopped"
     config.pid = nil
@@ -198,7 +198,7 @@ function ProcessManager.Restart(self: ProcessManager, name: string): ProcessStor
 end
 
 function ProcessManager.List(self: ProcessManager)
-    local processes = store:GetAll()
+    const processes = store:GetAll()
 
     if not next(processes) then
         print("No processes registered")
@@ -206,7 +206,7 @@ function ProcessManager.List(self: ProcessManager)
     end
 
     print()
-    local header = string.format(
+    const header = string.format(
         "%s%-15s %-10s %-8s %-10s %-8s %-12s%s",
         stdio.style("bold"),
         "Name",
@@ -221,7 +221,7 @@ function ProcessManager.List(self: ProcessManager)
     print(string.rep("-", 75))
 
     for name, config in processes do
-        local actuallyRunning = config.pid and isProcessRunning(config.pid)
+        const actuallyRunning = config.pid and isProcessRunning(config.pid)
 
         if config.status == "online" and not actuallyRunning then
             config.status = "errored"
@@ -229,16 +229,16 @@ function ProcessManager.List(self: ProcessManager)
             store:Save(config)
         end
 
-        local statusColor = if config.status == "online"
+        const statusColor = if config.status == "online"
             then stdio.color("green")
             elseif config.status == "errored" then stdio.color("red")
             else stdio.color("yellow")
 
-        local pid = config.pid and tostring(config.pid) or "-"
-        local version = `v{config.currentVersion}`
-        local autoRestart = config.autoRestart and "yes" or "no"
+        const pid = config.pid and tostring(config.pid) or "-"
+        const version = `v{config.currentVersion}`
+        const autoRestart = config.autoRestart and "yes" or "no"
 
-        local row = string.format(
+        const row = string.format(
             "%-15s %s%-10s%s %-8s %-10d %-8s %-12s",
             name,
             statusColor,
@@ -258,18 +258,18 @@ end
 function ProcessManager.Logs(self: ProcessManager, name: string, lines: number?, follow: boolean?)
     assert(t.string(name), "Expected name to be a string")
 
-    local config = store:Get(name)
+    const config = store:Get(name)
     if not config then
         error(`Process "{name}" not found`)
     end
 
-    local logPath = store:GetLogPath(name)
+    const logPath = store:GetLogPath(name)
     if not fs.isFile(logPath) then
         print("No logs available")
         return
     end
 
-    local numLines = lines or 50
+    const numLines = lines or 50
 
     if follow then
         print(`{stdio.style("dim")}--- Following logs for {name} (Ctrl+C to stop) ---{stdio.style("reset")}`)
@@ -277,7 +277,7 @@ function ProcessManager.Logs(self: ProcessManager, name: string, lines: number?,
             stdio = "inherit",
         })
     else
-        local result = process.exec("tail", { `-n{numLines}`, logPath })
+        const result = process.exec("tail", { `-n{numLines}`, logPath })
         if result.ok then
             print(`{stdio.style("dim")}--- Last {numLines} lines of {name} ---{stdio.style("reset")}`)
             print(result.stdout)
@@ -290,7 +290,7 @@ end
 function ProcessManager.Delete(self: ProcessManager, name: string)
     assert(t.string(name), "Expected name to be a string")
 
-    local config = store:Get(name)
+    const config = store:Get(name)
     if not config then
         error(`Process "{name}" not found`)
     end
@@ -316,7 +316,7 @@ function ProcessManager.Deploy(self: ProcessManager, name: string, scriptPath: s
         error(`Process "{name}" not found`)
     end
 
-    local versionNumber = store:SaveVersion(name, scriptPath)
+    const versionNumber = store:SaveVersion(name, scriptPath)
     config = store:Get(name) :: ProcessStore.ProcessConfig
 
     print(`Deployed version {versionNumber} of "{name}"`)
@@ -331,12 +331,12 @@ end
 function ProcessManager.Rollback(self: ProcessManager, name: string, version: number?): number
     assert(t.string(name), "Expected name to be a string")
 
-    local config = store:Get(name)
+    const config = store:Get(name)
     if not config then
         error(`Process "{name}" not found`)
     end
 
-    local targetVersion = version or (config.currentVersion - 1)
+    const targetVersion = version or (config.currentVersion - 1)
 
     if targetVersion < 1 or targetVersion > #config.versions then
         error(`Invalid version: {targetVersion}. Available: 1-{#config.versions}`)
@@ -353,7 +353,7 @@ function ProcessManager.Rollback(self: ProcessManager, name: string, version: nu
     print(`Rolled back "{name}" to version {targetVersion}`)
 
     if config.status == "online" then
-        local versionPath = store:GetVersionPath(name, targetVersion)
+        const versionPath = store:GetVersionPath(name, targetVersion)
         if versionPath then
             config.script = versionPath
             store:Save(config)
@@ -367,12 +367,12 @@ end
 function ProcessManager.Status(self: ProcessManager, name: string)
     assert(t.string(name), "Expected name to be a string")
 
-    local config = store:Get(name)
+    const config = store:Get(name)
     if not config then
         error(`Process "{name}" not found`)
     end
 
-    local actuallyRunning = config.pid and isProcessRunning(config.pid)
+    const actuallyRunning = config.pid and isProcessRunning(config.pid)
     if config.status == "online" and not actuallyRunning then
         config.status = "errored"
         config.pid = nil
@@ -398,17 +398,17 @@ function ProcessManager.Status(self: ProcessManager, name: string)
 end
 
 function ProcessManager.Startup(self: ProcessManager, platform: string?)
-    local plat = platform or "systemd"
+    const plat = platform or "systemd"
 
     if plat ~= "systemd" then
         error(`Unsupported platform: {plat}. Currently only "systemd" is supported.`)
     end
 
-    local user = process.env.USER or "root"
-    local home = process.env.HOME or `/home/{user}`
-    local rokitPath = `{home}/.rokit/bin`
+    const user = process.env.USER or "root"
+    const home = process.env.HOME or `/home/{user}`
+    const rokitPath = `{home}/.rokit/bin`
 
-    local serviceContent = "[Unit]\n"
+    const serviceContent = "[Unit]\n"
         .. "Description=lune-pm Process Manager\n"
         .. "After=network.target\n"
         .. "\n"
@@ -424,7 +424,7 @@ function ProcessManager.Startup(self: ProcessManager, platform: string?)
         .. "[Install]\n"
         .. "WantedBy=multi-user.target\n"
 
-    local resurrectScript = [=[#!/usr/bin/env -S lune run
+    const resurrectScript = [=[#!/usr/bin/env -S lune run
 
 --[[
 
@@ -466,8 +466,8 @@ end
 resurrect()
 ]=]
 
-    local dataDir = ProcessStore.GetDataDir()
-    local resurrectPath = `{dataDir}/resurrect.luau`
+    const dataDir = ProcessStore.GetDataDir()
+    const resurrectPath = `{dataDir}/resurrect.luau`
     fs.writeFile(resurrectPath, resurrectScript)
 
     print(`{stdio.style("bold")}Startup Configuration{stdio.style("reset")}`)
@@ -487,7 +487,7 @@ resurrect()
 end
 
 function ProcessManager.Monit(self: ProcessManager, interval: number?)
-    local refreshInterval = interval or 2
+    const refreshInterval = interval or 2
 
     print(`{stdio.style("bold")}Process Monitor{stdio.style("reset")} (refresh: {refreshInterval}s, Ctrl+C to exit)`)
     print()
@@ -503,7 +503,7 @@ function ProcessManager.Monit(self: ProcessManager, interval: number?)
 end
 
 function ProcessManager.CheckAndRestart(self: ProcessManager)
-    local processes = store:GetAll()
+    const processes = store:GetAll()
     local restarted = 0
 
     for name, config in processes do
@@ -516,7 +516,7 @@ function ProcessManager.CheckAndRestart(self: ProcessManager)
                     config.status = "errored"
                     store:Save(config)
                 else
-                    local delay = config.restartDelay or DEFAULT_RESTART_DELAY
+                    const delay = config.restartDelay or DEFAULT_RESTART_DELAY
                     print(`  Waiting {delay} seconds before restart...`)
                     task.wait(delay)
                     self:Restart(name)
