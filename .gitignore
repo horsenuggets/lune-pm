@@ -2,7 +2,10 @@
 .claude
 .env
 .local
-.vscode
+# Keep shared formatter settings, but ignore other local VS Code files.
+/.vscode/*
+!/.vscode/extensions.json
+!/.vscode/settings.json
 *.bak
 *.gen.*
 *.lock
