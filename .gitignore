@@ -32,3 +32,9 @@ __VERSION__.luau
 # Worktrees
 /.worktrees/
 /.wt/
+
+# Dependencies
+/.wally-install/
+
+# Generated files
+/wally.install.json
