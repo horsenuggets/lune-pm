@@ -16,7 +16,7 @@ const process = require("@lune/process")
 const stdio = require("@lune/stdio")
 
 const TESTS = {
-    { Name = "ExampleTest", Func = require("../Tests/ExampleTest.spec") },
+    { Name = "ExampleTest", Func = require("../Tests/ExampleTest.spec") }
 }
 
 const RunTests = {}

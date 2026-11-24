@@ -32,7 +32,7 @@ export type ProcessConfig = {
     currentVersion: number,
     versions: { string },
     env: { [string]: string }?,
-    command: string?,
+    command: string?
 }
 
 const ProcessStore = {}

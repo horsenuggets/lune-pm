@@ -19,10 +19,10 @@ return Commandline.Command.new({
         Commandline.Arg.new({
             Name = "name",
             Description = "Name of the process.",
-            Required = true,
-        }),
+            Required = true
+        })
     },
     Impl = function(args)
         pm:Status(args.name)
-    end,
+    end
 })

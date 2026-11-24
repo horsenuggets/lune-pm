@@ -19,18 +19,18 @@ return Commandline.Command.new({
         Commandline.Arg.new({
             Name = "name",
             Description = "Name of the process.",
-            Required = true,
-        }),
+            Required = true
+        })
     },
     Flags = {
         Commandline.Flag.new({
             Name = "version",
             Shorthand = "v",
             Description = "Version number to rollback to (default: previous).",
-            Type = "number",
-        }),
+            Type = "number"
+        })
     },
     Impl = function(args, flags)
         pm:Rollback(args.name, flags.version)
-    end,
+    end
 })

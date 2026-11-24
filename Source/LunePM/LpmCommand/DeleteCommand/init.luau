@@ -18,10 +18,10 @@ return Commandline.Command.new({
         Commandline.Arg.new({
             Name = "name",
             Description = "Name of the process to delete.",
-            Required = true,
-        }),
+            Required = true
+        })
     },
     Impl = function(args)
         pm:Delete(args.name)
-    end,
+    end
 })

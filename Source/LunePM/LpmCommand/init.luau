@@ -36,6 +36,6 @@ return Commandline.Command.new({
         StartCommand,
         StartupCommand,
         StatusCommand,
-        StopCommand,
-    },
+        StopCommand
+    }
 })

@@ -18,10 +18,10 @@ return Commandline.Command.new({
         Commandline.Arg.new({
             Name = "name",
             Description = "Name of the process to stop.",
-            Required = true,
-        }),
+            Required = true
+        })
     },
     Impl = function(args)
         pm:Stop(args.name)
-    end,
+    end
 })

@@ -19,44 +19,44 @@ return Commandline.Command.new({
         Commandline.Arg.new({
             Name = "script",
             Description = "Path to the Lune script to run.",
-            Required = true,
-        }),
+            Required = true
+        })
     },
     Flags = {
         Commandline.Flag.new({
             Name = "command",
             Shorthand = "c",
             Description = "Custom command to run (instead of lune run).",
-            Type = "string",
+            Type = "string"
         }),
         Commandline.Flag.new({
             Name = "cwd",
             Description = "Working directory for the process.",
-            Type = "string",
+            Type = "string"
         }),
         Commandline.Flag.new({
             Name = "max-restarts",
             Shorthand = "m",
             Description = "Maximum restart attempts (default: 10).",
-            Type = "number",
+            Type = "number"
         }),
         Commandline.Flag.new({
             Name = "name",
             Shorthand = "n",
             Description = "Name for the process.",
-            Type = "string",
+            Type = "string"
         }),
         Commandline.Flag.new({
             Name = "no-auto-restart",
             Description = "Disable automatic restart on crash.",
-            Type = "boolean",
+            Type = "boolean"
         }),
         Commandline.Flag.new({
             Name = "restart-delay",
             Shorthand = "d",
             Description = "Seconds to wait before restarting (default: 5).",
-            Type = "number",
-        }),
+            Type = "number"
+        })
     },
     Impl = function(args, flags)
         pm:Start(args.script, {
@@ -65,7 +65,7 @@ return Commandline.Command.new({
             restartDelay = flags["restart-delay"],
             maxRestarts = flags["max-restarts"],
             noAutoRestart = flags["no-auto-restart"],
-            command = flags.command,
+            command = flags.command
         })
-    end,
+    end
 })
