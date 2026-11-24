@@ -2,6 +2,7 @@
     "recommendations": [
         "hashicorp.hcl",
         "hashicorp.terraform",
+        "horsenuggets.styluau",
         "jkillian.custom-local-formatters"
     ]
 }
