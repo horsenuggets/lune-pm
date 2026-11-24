@@ -21,10 +21,10 @@ return Commandline.Command.new({
             Shorthand = "p",
             Description = "Platform (systemd).",
             Type = "string",
-            Default = "systemd",
-        }),
+            Default = "systemd"
+        })
     },
     Impl = function(_, flags)
         pm:Startup(flags.platform)
-    end,
+    end
 })

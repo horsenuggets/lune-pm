@@ -18,13 +18,13 @@ const BuildExecutable = {}
 
 function BuildExecutable.exec()
     Commandline.Toolkit.generateVersion({
-        OutputPath = VERSION_OUTPUT,
+        OutputPath = VERSION_OUTPUT
     })
 
     Commandline.Toolkit.build({
         Name = "lpm",
         EntryPoint = "Source/LunePM",
-        Target = process.args[1],
+        Target = process.args[1]
     })
 end
 

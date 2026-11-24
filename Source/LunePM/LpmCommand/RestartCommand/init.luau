@@ -18,10 +18,10 @@ return Commandline.Command.new({
         Commandline.Arg.new({
             Name = "name",
             Description = "Name of the process to restart.",
-            Required = true,
-        }),
+            Required = true
+        })
     },
     Impl = function(args)
         pm:Restart(args.name)
-    end,
+    end
 })

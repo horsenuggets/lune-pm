@@ -19,15 +19,15 @@ return Commandline.Command.new({
         Commandline.Arg.new({
             Name = "name",
             Description = "Name of the process.",
-            Required = true,
+            Required = true
         }),
         Commandline.Arg.new({
             Name = "script",
             Description = "Path to the new script.",
-            Required = true,
-        }),
+            Required = true
+        })
     },
     Impl = function(args)
         pm:Deploy(args.name, args.script)
-    end,
+    end
 })

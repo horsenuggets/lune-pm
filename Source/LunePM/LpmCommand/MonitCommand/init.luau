@@ -21,10 +21,10 @@ return Commandline.Command.new({
             Shorthand = "i",
             Description = "Refresh interval in seconds (default: 2).",
             Type = "number",
-            Default = 2,
-        }),
+            Default = 2
+        })
     },
     Impl = function(_, flags)
         pm:Monit(flags.interval)
-    end,
+    end
 })

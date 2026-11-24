@@ -52,7 +52,7 @@ function ProcessManager.Start(
         maxRestarts: number?,
         noAutoRestart: boolean?,
         command: string?,
-        env: { [string]: string }?,
+        env: { [string]: string }?
     }?
 ): ProcessStore.ProcessConfig
     assert(t.string(scriptPath), "Expected scriptPath to be a string")
@@ -91,7 +91,7 @@ function ProcessManager.Start(
             currentVersion = 0,
             versions = {},
             env = opts.env,
-            command = opts.command,
+            command = opts.command
         }
 
     config.cwd = workingDir
@@ -115,7 +115,7 @@ function ProcessManager.Start(
     const shellCmd = `nohup {cmd} {table.concat(args, " ")} >> {logPath} 2>&1 & echo $!`
 
     const result = process.exec("sh", { "-c", shellCmd }, {
-        cwd = config.cwd,
+        cwd = config.cwd
     })
 
     if result.ok then
@@ -193,7 +193,7 @@ function ProcessManager.Restart(self: ProcessManager, name: string): ProcessStor
         maxRestarts = config.maxRestarts,
         noAutoRestart = not config.autoRestart,
         command = config.command,
-        env = config.env,
+        env = config.env
     })
 end
 
@@ -274,7 +274,7 @@ function ProcessManager.Logs(self: ProcessManager, name: string, lines: number?,
     if follow then
         print(`{stdio.style("dim")}--- Following logs for {name} (Ctrl+C to stop) ---{stdio.style("reset")}`)
         process.exec("tail", { `-n{numLines}`, "-f", logPath }, {
-            stdio = "inherit",
+            stdio = "inherit"
         })
     else
         const result = process.exec("tail", { `-n{numLines}`, logPath })

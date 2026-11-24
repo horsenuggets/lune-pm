@@ -17,5 +17,5 @@ return Commandline.Command.new({
     Description = "List all managed processes.",
     Impl = function()
         pm:List()
-    end,
+    end
 })
